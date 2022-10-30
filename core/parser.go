@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/Jeffail/gabs/v2"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/utils"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/libs"
 	"github.com/thoas/go-funk"
 	"gopkg.in/yaml.v2"
 )

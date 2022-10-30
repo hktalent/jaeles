@@ -1,5 +1,5 @@
 FROM golang:1.14-buster as builder
-RUN GO111MODULE=on GOOS=linux go get -ldflags "-linkmode external -extldflags -static" github.com/jaeles-project/jaeles
+RUN GO111MODULE=on GOOS=linux go get -ldflags "-linkmode external -extldflags -static" github.com/hktalent/jaeles
 
 FROM alpine:latest
 WORKDIR /

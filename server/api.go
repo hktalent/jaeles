@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jaeles-project/jaeles/database"
-	"github.com/jaeles-project/jaeles/database/models"
+	"github.com/hktalent/jaeles/database"
+	"github.com/hktalent/jaeles/database/models"
 )
 
 // Ping testing authenticated connection

@@ -3,7 +3,7 @@ package core
 import (
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/libs"
 	"testing"
 )
 
@@ -55,7 +55,7 @@ requests:
         StatusCode() == 200
 
 `
-	//signFile := "/Users/j3ssie/go/src/github.com/jaeles-project/jaeles/test-sign/default-cred.yaml"
+	//signFile := "/Users/j3ssie/go/src/github.com/hktalent/jaeles/test-sign/default-cred.yaml"
 	sign, err := ParseSignFromContent(signContent)
 	if err != nil {
 		t.Errorf("Error parsing signature")

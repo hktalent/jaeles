@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/Jeffail/gabs/v2"
-	"github.com/jaeles-project/jaeles/libs"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/libs"
+	"github.com/hktalent/jaeles/utils"
 	"github.com/robertkrimen/otto"
 	"github.com/thoas/go-funk"
 )

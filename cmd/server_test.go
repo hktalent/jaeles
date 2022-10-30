@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/jaeles-project/jaeles/core"
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/core"
+	"github.com/hktalent/jaeles/libs"
 )
 
 func TestServerWithSign(t *testing.T) {

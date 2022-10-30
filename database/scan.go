@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/jaeles-project/jaeles/database/models"
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/database/models"
+	"github.com/hktalent/jaeles/libs"
 )
 
 // CleanScans clean all scan

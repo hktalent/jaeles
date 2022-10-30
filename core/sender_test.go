@@ -1,11 +1,11 @@
 package core
 
 import (
-	"github.com/jaeles-project/jaeles/sender"
+	"github.com/hktalent/jaeles/sender"
 	"strings"
 	"testing"
 
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/libs"
 )
 
 func TestReallySending(t *testing.T) {

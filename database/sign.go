@@ -2,15 +2,15 @@ package database
 
 import (
 	"fmt"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/utils"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
 
-	"github.com/jaeles-project/jaeles/database/models"
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/database/models"
+	"github.com/hktalent/jaeles/libs"
 )
 
 // CleanSigns clean all signature

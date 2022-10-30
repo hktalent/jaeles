@@ -2,8 +2,8 @@ package core
 
 import (
 	"fmt"
-	"github.com/jaeles-project/jaeles/libs"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/libs"
+	"github.com/hktalent/jaeles/utils"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
 	"os"

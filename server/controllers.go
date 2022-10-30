@@ -3,14 +3,14 @@ package server
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/utils"
 	"net/http"
 
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/libs"
 
 	"github.com/fatih/color"
 	"github.com/gin-gonic/gin"
-	"github.com/jaeles-project/jaeles/core"
+	"github.com/hktalent/jaeles/core"
 )
 
 // RequestData struct for recive request from burp

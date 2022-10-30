@@ -1,10 +1,10 @@
 package core
 
 import (
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/utils"
 	"time"
 
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/libs"
 )
 
 // Background main function to call other background task

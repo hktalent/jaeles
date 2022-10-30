@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/jaeles-project/jaeles/database/models"
+	"github.com/hktalent/jaeles/database/models"
 	"github.com/jinzhu/gorm"
 
 	// load driver

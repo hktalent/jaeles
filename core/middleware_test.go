@@ -3,7 +3,7 @@ package core
 import (
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/libs"
 	"testing"
 )
 

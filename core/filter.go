@@ -2,9 +2,9 @@ package core
 
 import (
 	"fmt"
-	"github.com/jaeles-project/jaeles/libs"
-	"github.com/jaeles-project/jaeles/sender"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/libs"
+	"github.com/hktalent/jaeles/sender"
+	"github.com/hktalent/jaeles/utils"
 	"github.com/thoas/go-funk"
 )
 

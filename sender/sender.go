@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/utils"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/libs"
 	"github.com/sirupsen/logrus"
 )
 

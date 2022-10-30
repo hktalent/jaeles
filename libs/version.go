@@ -8,9 +8,9 @@ const (
 	// DOCS link to official documentation
 	DOCS = "https://jaeles-project.github.io/"
 	// SIGNREPO default repo to get signature
-	SIGNREPO = "https://github.com/jaeles-project/jaeles-signatures"
+	SIGNREPO = "https://github.com/hktalent/jaeles-signatures"
 	// UIREPO default repo to get UI
-	UIREPO = "https://github.com/jaeles-project/jaeles-plugins"
+	UIREPO = "https://github.com/hktalent/jaeles-plugins"
 	// REPORT default report template file
 	REPORT = "https://raw.githubusercontent.com/jaeles-project/jaeles-plugins/master/report/index.html"
 	// VREPORT verbose report template file

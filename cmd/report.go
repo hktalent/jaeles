@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"github.com/jaeles-project/jaeles/core"
-	"github.com/jaeles-project/jaeles/libs"
-	"github.com/jaeles-project/jaeles/sender"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/core"
+	"github.com/hktalent/jaeles/libs"
+	"github.com/hktalent/jaeles/sender"
+	"github.com/hktalent/jaeles/utils"
 	"github.com/spf13/cobra"
 	"os"
 	"path"
@@ -24,8 +24,8 @@ func init() {
 
 func runReport(cmd *cobra.Command, _ []string) error {
 	templateFile, _ := cmd.Flags().GetString("template")
-	options.Report.TemplateFile = templateFile
-	DoGenReport(options)
+	Options.Report.TemplateFile = templateFile
+	DoGenReport(Options)
 	return nil
 }
 

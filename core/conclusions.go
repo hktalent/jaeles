@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/utils"
 	"github.com/robertkrimen/otto"
 	"os/exec"
 	"regexp"

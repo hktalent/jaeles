@@ -10,10 +10,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/jaeles-project/jaeles/core"
-	"github.com/jaeles-project/jaeles/database"
-	"github.com/jaeles-project/jaeles/libs"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/core"
+	"github.com/hktalent/jaeles/database"
+	"github.com/hktalent/jaeles/libs"
+	"github.com/hktalent/jaeles/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -31,12 +31,12 @@ func init() {
 	configCmd.Flags().String("secret", "", "Secret of Burp Collab")
 	configCmd.Flags().String("collab", "", "List of Burp Collab File")
 	// used for update action
-	configCmd.Flags().BoolVar(&options.Config.SkipMics, "mics", true, "Skip import mics signatures")
-	configCmd.Flags().BoolVarP(&options.Config.Forced, "yes", "y", false, "Forced to delete old folder")
-	configCmd.Flags().StringVar(&options.Config.Username, "user", "", "Username")
-	configCmd.Flags().StringVar(&options.Config.Password, "pass", "", "Password")
-	configCmd.Flags().StringVar(&options.Config.Repo, "repo", "", "Signature Repo")
-	configCmd.Flags().StringVarP(&options.Config.PrivateKey, "key", "K", "", "Private Key to pull repo")
+	configCmd.Flags().BoolVar(&Options.Config.SkipMics, "mics", true, "Skip import mics signatures")
+	configCmd.Flags().BoolVarP(&Options.Config.Forced, "yes", "y", false, "Forced to delete old folder")
+	configCmd.Flags().StringVar(&Options.Config.Username, "user", "", "Username")
+	configCmd.Flags().StringVar(&Options.Config.Password, "pass", "", "Password")
+	configCmd.Flags().StringVar(&Options.Config.Repo, "repo", "", "Signature Repo")
+	configCmd.Flags().StringVarP(&Options.Config.PrivateKey, "key", "K", "", "Private Key to pull repo")
 	configCmd.SetHelpFunc(configHelp)
 	RootCmd.AddCommand(configCmd)
 
@@ -51,7 +51,7 @@ func runConfig(cmd *cobra.Command, args []string) error {
 		os.Exit(1)
 	}
 	// turn on verbose by default
-	options.Verbose = true
+	Options.Verbose = true
 	polling, _ := cmd.Flags().GetBool("poll")
 	// polling all oob
 	if polling == true {
@@ -68,35 +68,35 @@ func runConfig(cmd *cobra.Command, args []string) error {
 	if action == "" && len(args) > 0 {
 		action = args[0]
 	}
-	getJaelesEnv(&options)
+	getJaelesEnv(&Options)
 
 	switch action {
 	case "init":
-		if options.Config.Forced {
-			os.RemoveAll(options.SignFolder)
-			core.UpdatePlugins(options)
-			core.UpdateSignature(options)
+		if Options.Config.Forced {
+			os.RemoveAll(Options.SignFolder)
+			core.UpdatePlugins(Options)
+			core.UpdateSignature(Options)
 		}
-		reloadSignature(options.SignFolder, options.Config.SkipMics)
+		reloadSignature(Options.SignFolder, Options.Config.SkipMics)
 		break
 	case "update":
-		if options.Config.Forced {
-			os.RemoveAll(options.SignFolder)
+		if Options.Config.Forced {
+			os.RemoveAll(Options.SignFolder)
 		} else {
 			// only ask if use default Repo
-			if utils.FolderExists(options.SignFolder) && options.Config.Repo == "" {
-				mess := fmt.Sprintf("Looks like you already have signatures in %s\nDo you want to to override it?", options.RootFolder)
+			if utils.FolderExists(Options.SignFolder) && Options.Config.Repo == "" {
+				mess := fmt.Sprintf("Looks like you already have signatures in %s\nDo you want to to override it?", Options.RootFolder)
 				c := utils.PromptConfirm(mess)
 				if c {
 					utils.InforF("Cleaning root folder")
-					os.RemoveAll(options.SignFolder)
+					os.RemoveAll(Options.SignFolder)
 				}
 			}
 		}
 		database.CleanSigns()
-		core.UpdatePlugins(options)
-		core.UpdateSignature(options)
-		reloadSignature(path.Join(options.RootFolder, "base-signatures"), options.Config.SkipMics)
+		core.UpdatePlugins(Options)
+		core.UpdateSignature(Options)
+		reloadSignature(path.Join(Options.RootFolder, "base-signatures"), Options.Config.SkipMics)
 		break
 	case "clear":
 		utils.GoodF("Cleaning your DB")
@@ -105,12 +105,12 @@ func runConfig(cmd *cobra.Command, args []string) error {
 		database.CleanRecords()
 		break
 	case "clean":
-		utils.InforF("Cleaning root folder: %v", options.RootFolder)
-		os.RemoveAll(options.RootFolder)
+		utils.InforF("Cleaning root folder: %v", Options.RootFolder)
+		os.RemoveAll(Options.RootFolder)
 		break
 	case "cred":
-		database.CreateUser(options.Config.Username, options.Config.Password)
-		utils.GoodF("Create new credentials %v:%v \n", options.Config.Username, options.Config.Password)
+		database.CreateUser(Options.Config.Username, Options.Config.Password)
+		utils.GoodF("Create new credentials %v:%v \n", Options.Config.Username, Options.Config.Password)
 		break
 	case "oob":
 		secret, _ := cmd.Flags().GetString("secret")
@@ -121,20 +121,20 @@ func runConfig(cmd *cobra.Command, args []string) error {
 		}
 		break
 	case "reload":
-		os.RemoveAll(path.Join(options.RootFolder, "base-signatures"))
+		os.RemoveAll(path.Join(Options.RootFolder, "base-signatures"))
 		InitDB()
-		reloadSignature(options.SignFolder, options.Config.SkipMics)
+		reloadSignature(Options.SignFolder, Options.Config.SkipMics)
 		break
 	case "add":
-		addSignature(options.SignFolder)
+		addSignature(Options.SignFolder)
 		break
 	case "select":
 		SelectSign()
-		if len(options.SelectedSigns) == 0 {
+		if len(Options.SelectedSigns) == 0 {
 			fmt.Fprintf(os.Stderr, "[Error] No signature loaded\n")
 			fmt.Fprintf(os.Stderr, "Use 'jaeles -h' for more information about a command.\n")
 		} else {
-			utils.GoodF("Signatures Loaded: %v", strings.Join(options.SelectedSigns, " "))
+			utils.GoodF("Signatures Loaded: %v", strings.Join(Options.SelectedSigns, " "))
 		}
 		break
 	default:
@@ -169,7 +169,7 @@ func reloadSignature(signFolder string, skipMics bool) {
 	}
 	utils.GoodF("Reload signature in: %v", signFolder)
 	database.CleanSigns()
-	SignFolder, _ := filepath.Abs(path.Join(options.RootFolder, "base-signatures"))
+	SignFolder, _ := filepath.Abs(path.Join(Options.RootFolder, "base-signatures"))
 	if signFolder != "" && utils.FolderExists(signFolder) {
 		SignFolder = signFolder
 	}
@@ -196,7 +196,7 @@ func reloadSignature(signFolder string, skipMics bool) {
 		}
 	}
 
-	signPath := path.Join(options.RootFolder, "base-signatures")
+	signPath := path.Join(Options.RootFolder, "base-signatures")
 	passivePath := path.Join(signPath, "passives")
 	resourcesPath := path.Join(signPath, "resources")
 	thirdpartyPath := path.Join(signPath, "thirdparty")
@@ -208,13 +208,13 @@ func reloadSignature(signFolder string, skipMics bool) {
 
 	// move passive signatures to default passive
 	if utils.FolderExists(passivePath) {
-		utils.MoveFolder(passivePath, options.PassiveFolder)
+		utils.MoveFolder(passivePath, Options.PassiveFolder)
 	}
 	if utils.FolderExists(resourcesPath) {
-		utils.MoveFolder(resourcesPath, options.ResourcesFolder)
+		utils.MoveFolder(resourcesPath, Options.ResourcesFolder)
 	}
 	if utils.FolderExists(thirdpartyPath) {
-		utils.MoveFolder(thirdpartyPath, options.ThirdPartyFolder)
+		utils.MoveFolder(thirdpartyPath, Options.ThirdPartyFolder)
 	}
 
 }
@@ -236,7 +236,7 @@ func rootHelp(cmd *cobra.Command, _ []string) {
 
 // RootMessage print help message
 func RootMessage() {
-	h := "\nUsage:\n jaeles scan|server|config [options]\n"
+	h := "\nUsage:\n jaeles scan|server|config [Options]\n"
 	h += " jaeles scan|server|config|report -h -- Show usage message\n"
 	h += "\nSubcommands:\n"
 	h += "  jaeles scan   --  Scan list of URLs based on selected signatures\n"
@@ -305,7 +305,7 @@ Mics Flags:
 	h += "  jaeles server --host 0.0.0.0 --port 5000 -s '/tmp/custom-signature/sensitive/.*' -L 2\n"
 	h += "  jaeles config reload --signDir /tmp/standard-signatures/\n"
 	h += "  jaeles config add -B /tmp/custom-active-signatures/\n"
-	h += "  jaeles config update --repo https://github.com/jaeles-project/jaeles-signatures\n"
+	h += "  jaeles config update --repo https://github.com/hktalent/jaeles-signatures\n"
 	h += "  jaeles report -o /tmp/scanned/out\n"
 	h += "  jaeles report -o /tmp/scanned/out --title 'Passive Report'\n"
 	h += "  jaeles report -o /tmp/scanned/out --title 'Verbose Report' --sverbose\n"
@@ -407,16 +407,16 @@ func getJaelesEnv(options *libs.Options) {
 // CleanOutput clean the output folder in case nothing found
 func CleanOutput() {
 	// clean output
-	if utils.DirLength(options.Output) == 0 {
-		os.RemoveAll(options.Output)
+	if utils.DirLength(Options.Output) == 0 {
+		os.RemoveAll(Options.Output)
 	}
-	if utils.DirLength(options.PassiveFolder) == 0 {
-		os.RemoveAll(options.PassiveFolder)
+	if utils.DirLength(Options.PassiveFolder) == 0 {
+		os.RemoveAll(Options.PassiveFolder)
 	}
 
 	// unique vulnSummary
 	// Sort sort content of a file
-	data := utils.ReadingFileUnique(options.SummaryVuln)
+	data := utils.ReadingFileUnique(Options.SummaryVuln)
 	if len(data) == 0 {
 		return
 	}
@@ -424,5 +424,5 @@ func CleanOutput() {
 	content := strings.Join(data, "\n")
 	// remove blank line
 	content = regexp.MustCompile(`[\t\r\n]+`).ReplaceAllString(strings.TrimSpace(content), "\n")
-	utils.WriteToFile(options.SummaryVuln, content)
+	utils.WriteToFile(Options.SummaryVuln, content)
 }

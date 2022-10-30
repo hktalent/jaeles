@@ -3,7 +3,7 @@ package core
 import (
 	"testing"
 
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/libs"
 )
 
 // func TestGeneratorPath(t *testing.T) {

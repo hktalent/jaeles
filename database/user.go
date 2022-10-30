@@ -3,11 +3,11 @@ package database
 import (
 	"crypto/sha1"
 	"fmt"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/utils"
 	"strconv"
 	"time"
 
-	"github.com/jaeles-project/jaeles/database/models"
+	"github.com/hktalent/jaeles/database/models"
 )
 
 // SelectUser get password of one user to compare

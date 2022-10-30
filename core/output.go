@@ -3,8 +3,8 @@ package core
 import (
 	"fmt"
 	"github.com/fatih/color"
-	"github.com/jaeles-project/jaeles/libs"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/libs"
+	"github.com/hktalent/jaeles/utils"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/logrusorgru/aurora/v3"
 	"github.com/spf13/cast"

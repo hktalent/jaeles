@@ -4,8 +4,8 @@ import (
 	"encoding/base64"
 	"path/filepath"
 
-	"github.com/jaeles-project/jaeles/database/models"
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/database/models"
+	"github.com/hktalent/jaeles/libs"
 )
 
 // CleanRecords clean all record

@@ -2,7 +2,7 @@ package dns
 
 import (
 	"fmt"
-	"github.com/jaeles-project/jaeles/libs"
+	"github.com/hktalent/jaeles/libs"
 	"testing"
 )
 

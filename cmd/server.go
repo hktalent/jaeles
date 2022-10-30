@@ -8,11 +8,11 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/jaeles-project/jaeles/core"
-	"github.com/jaeles-project/jaeles/database"
-	"github.com/jaeles-project/jaeles/libs"
-	"github.com/jaeles-project/jaeles/server"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/core"
+	"github.com/hktalent/jaeles/database"
+	"github.com/hktalent/jaeles/libs"
+	"github.com/hktalent/jaeles/server"
+	"github.com/hktalent/jaeles/utils"
 
 	"github.com/spf13/cobra"
 )
@@ -31,17 +31,17 @@ func init() {
 }
 
 func runServer(cmd *cobra.Command, _ []string) error {
-	if options.NoDB {
+	if Options.NoDB {
 		fmt.Fprintf(os.Stderr, "Can't run Jaeles Server without DB\n")
 		os.Exit(-1)
 	}
 	SelectSign()
 	// prepare DB stuff
-	if options.Server.Username != "" {
-		database.CreateUser(options.Server.Username, options.Server.Password)
+	if Options.Server.Username != "" {
+		database.CreateUser(Options.Server.Username, Options.Server.Password)
 	}
 	// reload signature
-	SignFolder, _ := filepath.Abs(path.Join(options.RootFolder, "base-signatures"))
+	SignFolder, _ := filepath.Abs(path.Join(Options.RootFolder, "base-signatures"))
 	allSigns := utils.GetFileNames(SignFolder, ".yaml")
 	if allSigns != nil {
 		for _, signFile := range allSigns {
@@ -51,7 +51,7 @@ func runServer(cmd *cobra.Command, _ []string) error {
 	database.InitConfigSign()
 
 	var wg sync.WaitGroup
-	p, _ := ants.NewPoolWithFunc(options.Concurrency, func(i interface{}) {
+	p, _ := ants.NewPoolWithFunc(Options.Concurrency, func(i interface{}) {
 		CreateRunner(i)
 		wg.Done()
 	}, ants.WithPreAlloc(true))
@@ -62,14 +62,14 @@ func runServer(cmd *cobra.Command, _ []string) error {
 		for {
 			record := <-result
 			utils.InforF("[Receive] %v %v \n", record.OriginReq.Method, record.OriginReq.URL)
-			for _, signFile := range options.SelectedSigns {
+			for _, signFile := range Options.SelectedSigns {
 				sign, err := core.ParseSign(signFile)
 				if err != nil {
 					utils.ErrorF("Error loading sign: %v\n", signFile)
 					continue
 				}
 				// filter signature by level
-				if sign.Level > options.Level {
+				if sign.Level > Options.Level {
 					continue
 				}
 
@@ -111,14 +111,14 @@ func runServer(cmd *cobra.Command, _ []string) error {
 
 	host, _ := cmd.Flags().GetString("host")
 	port, _ := cmd.Flags().GetString("port")
-	options.Server.NoAuth, _ = cmd.Flags().GetBool("no-auth")
+	Options.Server.NoAuth, _ = cmd.Flags().GetBool("no-auth")
 	bind := fmt.Sprintf("%v:%v", host, port)
-	options.Server.Bind = bind
+	Options.Server.Bind = bind
 	utils.GoodF("Start API server at %v", fmt.Sprintf("http://%v/", bind))
-	server.InitRouter(options, result)
+	server.InitRouter(Options, result)
 	wg.Wait()
-	if utils.DirLength(options.Output) == 0 {
-		os.RemoveAll(options.Output)
+	if utils.DirLength(Options.Output) == 0 {
+		os.RemoveAll(Options.Output)
 	}
 	return nil
 }

@@ -3,9 +3,9 @@ package cmd
 import (
 	"bufio"
 	"fmt"
-	"github.com/jaeles-project/jaeles/core"
-	"github.com/jaeles-project/jaeles/libs"
-	"github.com/jaeles-project/jaeles/utils"
+	"github.com/hktalent/jaeles/core"
+	"github.com/hktalent/jaeles/libs"
+	"github.com/hktalent/jaeles/utils"
 	"github.com/panjf2000/ants"
 	"github.com/spf13/cobra"
 	"os"
@@ -25,8 +25,8 @@ func init() {
 
 	scanCmd.Flags().StringP("url", "u", "", "URL of target")
 	scanCmd.Flags().StringP("urls", "U", "", "URLs file of target")
-	scanCmd.Flags().StringVarP(&options.Scan.RawRequest, "raw", "r", "", "Raw request from Burp for origin")
-	scanCmd.Flags().BoolVar(&options.Scan.EnableGenReport, "html", false, "Generate HTML report after the scan done")
+	scanCmd.Flags().StringVarP(&Options.Scan.RawRequest, "raw", "r", "", "Raw request from Burp for origin")
+	scanCmd.Flags().BoolVar(&Options.Scan.EnableGenReport, "html", false, "Generate HTML report after the scan done")
 	scanCmd.SetHelpFunc(ScanHelp)
 	RootCmd.AddCommand(scanCmd)
 }
@@ -62,8 +62,8 @@ func runScan(cmd *cobra.Command, _ []string) error {
 				}
 			}
 			// store stdin as a temp file
-			if len(urls) > options.ChunkLimit && options.ChunkRun {
-				urlFile = path.Join(options.ChunkDir, fmt.Sprintf("raw-%v", core.RandomString(8)))
+			if len(urls) > Options.ChunkLimit && Options.ChunkRun {
+				urlFile = path.Join(Options.ChunkDir, fmt.Sprintf("raw-%v", core.RandomString(8)))
 				utils.InforF("Write stdin data to: %v", urlFile)
 				utils.WriteToFile(urlFile, strings.Join(urls, "\n"))
 			}
@@ -76,11 +76,11 @@ func runScan(cmd *cobra.Command, _ []string) error {
 		os.Exit(1)
 	}
 
-	if len(urls) > options.ChunkLimit && !options.ChunkRun {
+	if len(urls) > Options.ChunkLimit && !Options.ChunkRun {
 		utils.WarningF("Your inputs look very big.")
-		utils.WarningF("Consider using --chunk options")
+		utils.WarningF("Consider using --chunk Options")
 	}
-	if len(urls) > options.ChunkLimit && options.ChunkRun {
+	if len(urls) > Options.ChunkLimit && Options.ChunkRun {
 		utils.InforF("Running Jaeles in Chunk mode")
 		rawCommand := strings.Join(os.Args, " ")
 
@@ -89,8 +89,8 @@ func runScan(cmd *cobra.Command, _ []string) error {
 		} else {
 			rawCommand += " -U {}"
 		}
-		urlFiles := genChunkFiles(urlFile, options)
-		runChunk(rawCommand, urlFiles, options.ChunkThreads)
+		urlFiles := genChunkFiles(urlFile, Options)
+		runChunk(rawCommand, urlFiles, Options.ChunkThreads)
 		for _, chunkFile := range urlFiles {
 			os.RemoveAll(chunkFile)
 		}
@@ -101,16 +101,16 @@ func runScan(cmd *cobra.Command, _ []string) error {
 	/* ---- Really start do something ---- */
 
 	// run background detector
-	if !options.NoBackGround {
+	if !Options.NoBackGround {
 		go func() {
 			for {
-				core.Background(options)
+				core.Background(Options)
 			}
 		}()
 	}
 
 	var wg sync.WaitGroup
-	p, _ := ants.NewPoolWithFunc(options.Concurrency, func(i interface{}) {
+	p, _ := ants.NewPoolWithFunc(Options.Concurrency, func(i interface{}) {
 		CreateRunner(i)
 		wg.Done()
 	}, ants.WithPreAlloc(true))
@@ -119,13 +119,13 @@ func runScan(cmd *cobra.Command, _ []string) error {
 	for _, url := range urls {
 		// calculate filtering result first if enabled from cli
 		baseJob := libs.Job{URL: url}
-		if options.EnableFiltering {
-			core.BaseCalculateFiltering(&baseJob, options)
+		if Options.EnableFiltering {
+			core.BaseCalculateFiltering(&baseJob, Options)
 		}
 
-		for _, sign := range options.ParsedSelectedSigns {
+		for _, sign := range Options.ParsedSelectedSigns {
 			// filter signature by level
-			if sign.Level > options.Level {
+			if sign.Level > Options.Level {
 				continue
 			}
 			sign.Checksums = baseJob.Checksums
@@ -140,8 +140,8 @@ func runScan(cmd *cobra.Command, _ []string) error {
 	wg.Wait()
 	CleanOutput()
 
-	if options.Scan.EnableGenReport && utils.FolderExists(options.Output) {
-		DoGenReport(options)
+	if Options.Scan.EnableGenReport && utils.FolderExists(Options.Output) {
+		DoGenReport(Options)
 	}
 	return nil
 }
@@ -156,12 +156,12 @@ func CreateRunner(j interface{}) {
 	}
 
 	// enable local analyze
-	if options.LocalAnalyze {
+	if Options.LocalAnalyze {
 		core.LocalFileToResponse(&rawJob)
 	}
 
 	// auto prepend http and https prefix if not present
-	if !options.LocalAnalyze && !strings.HasPrefix(rawJob.URL, "http://") && !strings.HasPrefix(rawJob.URL, "https://") {
+	if !Options.LocalAnalyze && !strings.HasPrefix(rawJob.URL, "http://") && !strings.HasPrefix(rawJob.URL, "https://") {
 		withPrefixJob := rawJob
 		withPrefixJob.URL = "http://" + rawJob.URL
 		jobs = append(jobs, withPrefixJob)
@@ -173,8 +173,8 @@ func CreateRunner(j interface{}) {
 		jobs = append(jobs, rawJob)
 	}
 
-	if (rawJob.Sign.Replicate.Ports != "" || rawJob.Sign.Replicate.Prefixes != "") && !options.Mics.DisableReplicate {
-		if options.Mics.BaseRoot {
+	if (rawJob.Sign.Replicate.Ports != "" || rawJob.Sign.Replicate.Prefixes != "") && !Options.Mics.DisableReplicate {
+		if Options.Mics.BaseRoot {
 			rawJob.Sign.BasePath = true
 		}
 		moreJobs, err := core.ReplicationJob(rawJob.URL, rawJob.Sign)
@@ -186,19 +186,19 @@ func CreateRunner(j interface{}) {
 	for _, job := range jobs {
 		// custom calculate filtering if enabled inside signature
 		if job.Sign.Filter || len(job.Sign.FilteringPaths) > 0 {
-			core.CalculateFiltering(&job, options)
+			core.CalculateFiltering(&job, Options)
 		}
 		utils.DebugF("Raw Checksum: %v", job.Sign.Checksums)
 
 		if job.Sign.Type == "routine" {
-			routine, err := core.InitRoutine(job.URL, job.Sign, options)
+			routine, err := core.InitRoutine(job.URL, job.Sign, Options)
 			if err != nil {
 				utils.ErrorF("Error create new routine: %v", err)
 			}
 			routine.Start()
 			continue
 		}
-		runner, err := core.InitRunner(job.URL, job.Sign, options)
+		runner, err := core.InitRunner(job.URL, job.Sign, Options)
 		if err != nil {
 			utils.ErrorF("Error create new runner: %v", err)
 		}
@@ -208,14 +208,14 @@ func CreateRunner(j interface{}) {
 
 // CreateDnsRunner create runner for dns
 func CreateDnsRunner(job libs.Job) {
-	runner, err := core.InitDNSRunner(job.URL, job.Sign, options)
+	runner, err := core.InitDNSRunner(job.URL, job.Sign, Options)
 	if err != nil {
 		utils.ErrorF("Error create new dns runner: %v", err)
 	}
 	runner.Resolving()
 }
 
-/////////////////////// Chunk options (very experimental)
+/////////////////////// Chunk Options (very experimental)
 
 func genChunkFiles(urlFile string, options libs.Options) []string {
 	utils.DebugF("Store tmp chunk data at: %v", options.ChunkDir)

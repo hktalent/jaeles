@@ -1,8 +1,8 @@
 <p align="center">
-  <img alt="Jaeles" src="https://github.com/jaeles-project/jaeles-plugins/blob/master/assets/jaeles.png?raw=true" height="140" />
+  <img alt="Jaeles" src="https://github.com/hktalent/jaeles-plugins/blob/master/assets/jaeles.png?raw=true" height="140" />
   <p align="center">
     <a href=""><img alt="Software License" src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
-    <a href="https://github.com/jaeles-project/jaeles"><img alt="Release" src="https://img.shields.io/github/v/release/jaeles-project/jaeles.svg"></a>
+    <a href="https://github.com/hktalent/jaeles"><img alt="Release" src="https://img.shields.io/github/v/release/jaeles-project/jaeles.svg"></a>
     <a href="https://inventory.rawsec.ml/tools.html#Jaeles"><img src="https://inventory.rawsec.ml/img/badges/Rawsec-inventoried-FF5050_flat.svg" alt="Rawsec&#39;s CyberSecurity Inventory"></a>
   </p>
 </p>
@@ -10,7 +10,7 @@
 **Jaeles** is a powerful, flexible and easily extensible framework written in Go for building your own Web Application
 Scanner.
 
-![Architecture](https://github.com/jaeles-project/jaeles-plugins/blob/master/imgs/jaeles-architecture.png?raw=true)
+![Architecture](https://github.com/hktalent/jaeles-plugins/blob/master/imgs/jaeles-architecture.png?raw=true)
 
 ## Painless integrate Jaeles into your recon workflow?
 
@@ -24,23 +24,23 @@ Scanner.
 
 ## Installation
 
-Download [precompiled version here](https://github.com/jaeles-project/jaeles/releases).
+Download [precompiled version here](https://github.com/hktalent/jaeles/releases).
 
 If you have a Go environment, make sure you have **Go >= 1.13** with Go Modules enable and run the following command.
 
 ```shell
-GO111MODULE=on go get github.com/jaeles-project/jaeles
+GO111MODULE=on go get github.com/hktalent/jaeles
 ```
 
 In case of "go get" failure, try the below method.
 
 ```shell
-GO111MODULE=on go install github.com/jaeles-project/jaeles@latest
+GO111MODULE=on go install github.com/hktalent/jaeles@latest
 ```
 
 Please visit the [Official Documention](https://jaeles-project.github.io/) for more details.
 
-### **Note**: Checkout [Signatures Repo](https://github.com/jaeles-project/jaeles-signatures) for install signature.
+### **Note**: Checkout [Signatures Repo](https://github.com/hktalent/jaeles-signatures) for install signature.
 
 ## Usage
 
@@ -89,13 +89,13 @@ docker run j3ssie/jaeles scan -s '<selector>' -u http://example.com
 
 ### HTML Report summary
 
-![HTML Report](https://github.com/jaeles-project/jaeles-plugins/blob/master/assets/jaeles-report.png?raw=true)
+![HTML Report](https://github.com/hktalent/jaeles-plugins/blob/master/assets/jaeles-report.png?raw=true)
 
 ### Burp Integration
 
-![Burp Integration](https://github.com/jaeles-project/jaeles-plugins/blob/master/imgs/Burp-Integration.gif?raw=true)
+![Burp Integration](https://github.com/hktalent/jaeles-plugins/blob/master/imgs/Burp-Integration.gif?raw=true)
 
-Plugin can be found [here](https://github.com/jaeles-project/jaeles-plugins/blob/master/jaeles-burp.py) and Video
+Plugin can be found [here](https://github.com/hktalent/jaeles-plugins/blob/master/jaeles-burp.py) and Video
 Guide [here](https://youtu.be/1lxsYhfTq3M)
 
 ## Mentions
@@ -116,7 +116,7 @@ Guide [here](https://youtu.be/1lxsYhfTq3M)
 
 If you have some new idea about this project, issue, feedback or found some valuable tool feel free to open an issue for
 just DM me via @j3ssiejjj. Feel free to submit new signature to
-this [repo](https://github.com/jaeles-project/jaeles-signatures).
+this [repo](https://github.com/hktalent/jaeles-signatures).
 
 ### Credits
 
@@ -136,7 +136,7 @@ this [repo](https://github.com/jaeles-project/jaeles-signatures).
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/jaeles-project/jaeles/graphs/contributors"><img src="https://opencollective.com/jaeles-project/contributors.svg?width=890" /></a>
+<a href="https://github.com/hktalent/jaeles/graphs/contributors"><img src="https://opencollective.com/jaeles-project/contributors.svg?width=890" /></a>
 
 ### Financial Contributors
 
